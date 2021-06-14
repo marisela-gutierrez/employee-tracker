@@ -11,5 +11,5 @@ This application uses the command-line to manage and navigate a company's employ
 
 Link to a walkthrough video demonstrating the functionality of the application.: 
 
-https://drive.google.com/file/d/1IQmHTWhhKyaG31aVW0AnrCg-HsgEf-wI/view
+https://drive.google.com/file/d/1IQmHTWhhKyaG31aVW0AnrCg-HsgEf-wI/preview
 
