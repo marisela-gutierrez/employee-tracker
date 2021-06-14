@@ -54,7 +54,7 @@ function initialQuestions() {
     });
 }
  
-initialQuestions();
+
 
 
 // view all departments
@@ -242,3 +242,4 @@ function createEmployee() {
     });
 }
  
+initialQuestions();
