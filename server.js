@@ -106,3 +106,84 @@ function createRole() {
       });
     });
 }
+
+// view all employees
+function viewAllEmployees() {
+  const sql = `SELECT employee.*, role.title, role.salary, department.name FROM employee
+                LEFT JOIN role
+                ON role.id = employee.role_id
+                LEFT JOIN department
+                ON role.department_id = department.id`;
+ 
+  db.query(sql, (err, rows) => {
+    if (err) throw err;
+    console.log(cTable.getTable(rows));
+    initialQuestions();
+  });
+}
+ 
+// Create an employee
+function createEmployee() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "firstName",
+        message: "Enter employee first name",
+        validate: (firstName) => {
+          if (firstName) {
+            return true;
+          } else {
+            console.log("Please enter employee first name");
+          }
+        },
+      },
+      {
+        type: "input",
+        name: "lastName",
+        message: "Enter employee last name",
+        validate: (lastName) => {
+          if (lastName) {
+            return true;
+          } else {
+            console.log("Please enter employee last name");
+          }
+        },
+      },
+      {
+        type: "input",
+        name: "role",
+        message: "Enter employee role ",
+        validate: (role) => {
+          if (role) {
+            return true;
+          } else {
+            console.log("Please enter employee role");
+          }
+        },
+      },
+      {
+        type: "input",
+        name: "manager",
+        message: "Enter employee manager",
+        validate: (manager) => {
+          if (manager) {
+            return true;
+          } else {
+            console.log("Please enter employee manager");
+          }
+        },
+      },
+    ])
+    .then((newEmployee) => {
+      const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)`;
+      params = [newEmployee.first_name, newEmployee.last_name, newEmployee.role_id, newEmployee.manager_id];
+ 
+      db.query(sql, params, (err, rows) => {
+        if (err) throw err;
+        console.log("new employee added");
+        initialQuestions();
+      });
+    });
+}
+ 
