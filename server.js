@@ -2,6 +2,61 @@ const db = require('./db/connection');
 const inquirer = require("inquirer");
 const cTable = require("console.table");
 
+function initialQuestions() {
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "userInput",
+        pageSize: 8,
+        message: "What would you like to do?",
+        choices: [
+          "View all departments",
+          "View all roles",
+          "View all employees",
+          "Add a department",
+          "Add a role",
+          "Add an employee",
+          "Update an employee's role",
+          "Exit application",
+        ],
+      },
+    ])
+    .then((response) => {
+      switch (response.userInput) {
+        case "View all departments":
+          viewAllDepartments();
+          break;
+        case "View all roles":
+          viewAllRoles();
+          break;
+        case "View all employees":
+          viewAllEmployees();
+          break;
+        case "Add a department":
+          createDepartment();
+          break;
+        case "Add a role":
+          createRole();
+          break;
+        case "Add an employee":
+          createEmployee();
+          break;
+        case "Update an employee's role":
+          //function
+          break;
+        case "Exit application":
+          process.exit();
+          break;
+        default:
+          console.log("error");
+      }
+    });
+}
+ 
+initialQuestions();
+
+
 // view all departments
 function viewAllDepartments() {
   const sql = "SELECT * from department";
