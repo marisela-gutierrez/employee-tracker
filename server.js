@@ -1,29 +1,41 @@
-const express = require('express');
 const db = require('./db/connection');
-const apiRoutes = require('./routes/apiRoutes');
-//const inquirer = require("inquirer");
-//const cTable = require("console.table");
+const inquirer = require("inquirer");
+const cTable = require("console.table");
 
-const PORT = process.env.PORT || 3001;
-const app = express();
-
-// Express middleware
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-
-// Use apiRoutes
-app.use('/api', apiRoutes);
-
-// Default response for any other request (Not Found)
-app.use((req, res) => {
-  res.status(404).end();
-});
-
-// Start server after DB connection
-db.connect(err => {
-  if (err) throw err;
-  console.log('Database connected.');
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+// view all departments
+function viewAllDepartments() {
+  const sql = "SELECT * from department";
+  db.query(sql, (err, rows) => {
+    if (err) throw err;
+    console.log(cTable.getTable(rows));
   });
-});
+  initialQuestions();
+}
+
+// Create a department
+function createDepartment() {
+  inquirer
+    .prompt({
+      type: "input",
+      name: "name",
+      message: "Enter the name of department:",
+      validate: (name) => {
+        if (name) {
+          return true;
+        } else {
+          console.log("Please enter the department name");
+          return false;
+        }
+      },
+    })
+    .then((newDepartment) => {
+      const sql = `INSERT INTO department (name) VALUES (?)`;
+      const params = newDepartment.name;
+      db.query(sql, params, (err, rows) => {
+        if (err) throw err;
+        console.log("New department successfully added");
+        initialQuestions();
+      });
+    });
+}
+
